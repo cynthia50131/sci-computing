@@ -90,10 +90,6 @@ def boston_input(request):
     )
 def boston_result(request):
     import pyFitMR.boston_lib as FB
-    from django.conf import settings
-    import os
-    import numpy
-    from sklearn.externals import joblib
 
     CRIM = request.POST.get('CRIM')
     ZN = request.POST.get('ZN')
@@ -109,32 +105,7 @@ def boston_result(request):
     B = request.POST.get('B')
     LSTAT = request.POST.get('LSTAT')
 
-    if not TAX:
-        CRIM=1.6566
-        ZN=0
-        INDUS=19.58
-        CHAS=0.
-        NOX=0.871
-        RM=6.122
-        AGE=97.3
-        DIS=1.618
-        TAX=5.
-        RAD=403.
-        PTRATIO=14.7
-        B=372.8
-        LSTAT=14.1
-        #X = numpy.array([CRIM, ZN, INDUS, CHAS, NOX, RM, AGE, DIS, TAX, RAD, PTRATIO, B, LSTAT], dtype = numpy.float64)
-        X = [1.6566, 0., 19.58, 0., 0.871 , 6.122, 97.3, 1.618, 5., 403., 14.7, 372.8, 14.1]
-
-    else:
-        X = numpy.array([CRIM, ZN, INDUS, CHAS, NOX, RM, AGE, DIS, TAX, RAD, PTRATIO, B, LSTAT], dtype = numpy.float64)
-
-    lr = joblib.load(os.path.join(settings.PROJECT_ROOT, 'app', 'lrmachine.pkl'))
-    MEDV = lr.predict(X)
-
-    result_dict = FB.boston(CRIM, ZN, INDUS, CHAS, NOX, RM, AGE, DIS, TAX, RAD, PTRATIO, B, LSTAT, MEDV)
-
-
+    result_dict = FB.boston(CRIM, ZN, INDUS, CHAS, NOX, RM, AGE, DIS, TAX, RAD, PTRATIO, B, LSTAT)
     return render(
         request,
         'app/boston_result.html',

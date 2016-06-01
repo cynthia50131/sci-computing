@@ -98,7 +98,6 @@
                     </div>
                 </div>
 
-
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-8">
                         <input type="hidden" name="next" value="/" />
@@ -121,15 +120,49 @@
 
 <p>
 Try it!
-
 <p>
+Simply copy the following test data into the input boxes and click "Predict".
+<p>
+
+Test data:
+<p>
+  CRIM=1.6566
+<p>
+  ZN=0
+<p>
+  INDUS=19.58
+<p>
+  CHAS=0
+<p>
+  NOX=0.871
+<p>
+  RM=6.122
+<p>
+  AGE=97.3
+<p>
+  DIS=1.618
+<p>
+  TAX=5
+<p>
+  RAD=403
+<p>
+  PTRATIO=14.7
+<p>
+  B=372.8
+<p>
+  LSTAT=14.1
+<p>
+
+<p></p>
 Provided by Yi-Fu Tsai & Teng-Yi Huang
+<p></p>
 {% endblock %}
 
 
 {% block scripts %}
 
     {% load staticfiles %}
+    <p>
 <script src="{% static 'app/scripts/jquery.validate.min.js' %}"></script>
-
+<p>
 {% endblock %}
