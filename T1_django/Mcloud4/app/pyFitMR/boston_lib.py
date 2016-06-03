@@ -5,7 +5,7 @@ def boston(CRIM, ZN, INDUS, CHAS, NOX, RM, AGE, DIS, TAX, RAD, PTRATIO, B, LSTAT
     import numpy
     from sklearn.externals import joblib
 
-    if CRIM and ZN and INDUS and CHAS and NOX and RM and AGE and DIS and TAX and RAD and PTRATIO and B and LSTAT and MEDV:
+    if CRIM and ZN and INDUS and CHAS and NOX and RM and AGE and DIS and TAX and RAD and PTRATIO and B and LSTAT:
         demo_data = 0
     else: #default value for testing
         CRIM=1.6566
@@ -27,7 +27,8 @@ def boston(CRIM, ZN, INDUS, CHAS, NOX, RM, AGE, DIS, TAX, RAD, PTRATIO, B, LSTAT
     lr = joblib.load(os.path.join(settings.PROJECT_ROOT, 'app', 'lrmachine.pkl'))
     MEDV = lr.predict(X)
 
-    HTML_text2 = "<p>CRIM = %s" % CRIM
+    HTML_text2 =' <h4>Input data</h4>'
+    HTML_text2 += "<p>CRIM = %s" % CRIM
     HTML_text2 += "<p>ZN = %s" % ZN
     HTML_text2 += "<p>INDUS = %s" % INDUS
     HTML_text2 += "<p>CHAS = %s" % CHAS
@@ -41,12 +42,13 @@ def boston(CRIM, ZN, INDUS, CHAS, NOX, RM, AGE, DIS, TAX, RAD, PTRATIO, B, LSTAT
     HTML_text2 += "<p>B = %s" % B
     HTML_text2 += "<p>LSTAT = %s" % LSTAT
 
-    HTML_text1 = "<p>MEDV = %s" % MEDV
+    HTML_text1 =' <h4>Prediction of the real estate in Boston</h4>'
+    HTML_text1 += "<h3> %s </h3>" % MEDV
 
     import Plotting_lib
     from sklearn.cross_validation import cross_val_predict
 
-    chart_title = 'T1 fitting for Look-Locker Experiment'
+    chart_title = 'Boston real estate forecast'
     xAxis_label = 'Measured'
     yAxis_label = 'Predicted'
 
@@ -54,6 +56,6 @@ def boston(CRIM, ZN, INDUS, CHAS, NOX, RM, AGE, DIS, TAX, RAD, PTRATIO, B, LSTAT
             'HTML_text1': HTML_text1,
             'HTML_text2': HTML_text2,
             'SVG':Plotting_lib.dynamic_svg1(MEDV, xAxis_label, yAxis_label),
-            'highchart':Plotting_lib.highchart1(chart_title, xAxis_label, yAxis_label)
+            'highchart':Plotting_lib.highchart1(MEDV, xAxis_label, yAxis_label, chart_title)
                }
     return result_dict

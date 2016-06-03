@@ -51,14 +51,15 @@ def dynamic_svg1(MEDV, xAxis_label, yAxis_label):
         #plt.scatter(x,y, s=65, marker='+',c= 'k',label='Original')
         #plt.plot(smoothx, smoothy,c= 'k',label='Fitted data')
         #plt.legend(loc='lower right')
-        plt.xlabel(xAxis_label)
-        plt.ylabel(yAxis_label)
+
         predicted = cross_val_predict(lr, boston.data, y, cv=10)
 
         fig, ax = plt.subplots()
+        plt.scatter(predicted, y, s=4, color = '0')
+        plt.plot([y.min(), y.max()], [y.min(), y.max()], 'b--', lw=2)
         plt.plot(MEDV, MEDV, 'r*', markersize=15)
-        plt.scatter(predicted, y, s=3, color = '0.7512795')
-        plt.plot([y.min(), y.max()], [y.min(), y.max()], 'k--', lw=2)
+        plt.xlabel(xAxis_label)
+        plt.ylabel(yAxis_label)
         #plt.xlabel('Measured')
         #plt.ylabel('Predicted')
         #plt.set_xlabel('Measured')
@@ -187,7 +188,7 @@ def highchart(x,y,smoothx, fitted_y,xAxis_label,yAxis_label,chart_title):
     return JS
 
 
-def highchart1(chart_title, xAxis_label, yAxis_label):
+def highchart1(MEDV, xAxis_label, yAxis_label, chart_title):
     from sklearn import datasets
     from sklearn.cross_validation import cross_val_predict
     from sklearn import linear_model
@@ -202,15 +203,28 @@ def highchart1(chart_title, xAxis_label, yAxis_label):
 
     for index in range(len(y)):
             if (index < (len(y) - 1)):
-                formattedline = '				[%10.3f , %10.3f ],' % (y[index], predicted[index])
+                formattedline = '				[%10.3f , %10.3f ],' % (predicted[index], y[index])
             else:
-                formattedline = '				[%10.3f , %10.3f ]' % (y[index], predicted[index])
-            original_data +=formattedline
+                formattedline = '				[%10.3f , %10.3f ]' % (predicted[index], y[index])
+            original_data += formattedline
 
 
     fitted_data = ''
-    for index in range(50):
-                fitted_data += '				[%f , %f ],' % (range(50)[index], range(50)[index])
+    for index in range(len([y.min(), y.max()])):
+            if (index < (len([y.min(), y.max()]) - 1)):
+                formattedline = '				[%10.3f , %10.3f ],' % ([y.min(), y.max()][index], [y.min(), y.max()][index])
+            else:
+                formattedline = '				[%10.3f , %10.3f ]' % ([y.min(), y.max()][index], [y.min(), y.max()][index])
+            fitted_data += formattedline
+
+    final = ''
+
+    for index in range(len(MEDV)):
+            if (index < (len(MEDV) - 1)):
+                formattedline = '				[%10.3f , %10.3f ],' % (MEDV[index], MEDV[index])
+            else:
+                formattedline = '				[%10.3f , %10.3f ]' % (MEDV[index], MEDV[index])
+            final += formattedline
 
     JS="""
                 <script type='text/javascript'>
@@ -278,19 +292,30 @@ def highchart1(chart_title, xAxis_label, yAxis_label):
                             }
                         },
                         series: [{
-                            name: 'Original',
-                            color: 'rgba(223, 83, 83, .8)',
-
+                            name: 'Boston data',
+                            marker: {
+                                    radius: 4
+                                            },
+                            color: 'rgba(167, 167, 211, .8)',
                             data: [	""" +  original_data + """	]
 
                         }, {
-                            name: 'Fitted Data',
+                            name: 'Standard line',
         			        lineWidth: 3,
         			         marker: {
                                             enabled: false
                                         },
-                            color: 'rgba(119, 152, 191, 1)',
+                            color: 'rgba(147, 147, 72, 1)',
                             data: [	""" +  fitted_data + """	]
+                        }, {
+                            name: 'Predicte Price',
+                            marker: {
+                                    radius: 6
+                                            },
+
+                            color: 'rgba(174, 91, 91, .8)',
+                            data: [	""" +  final + """	]
+
                         }]
                     });
                 });
@@ -299,7 +324,7 @@ def highchart1(chart_title, xAxis_label, yAxis_label):
         </script>
 
 
-        <div id='container2' style='width: 80%; height: 480px; margin: 0 auto;'></div>
+        <div id='container2' style='width: 80%; height: 550px; margin: 0 auto;'></div>
 
 
         """
